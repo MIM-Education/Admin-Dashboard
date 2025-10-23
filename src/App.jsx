@@ -614,4 +614,107 @@ const App = () => {
                         <p className="font-medium">{selectedSubmission.participant1Phone}</p>
                       </div>
                       <div>
-                        <p className
+                        <p className="text-sm text-gray-600">Email</p>
+                        <p className="font-medium">{selectedSubmission.participant1Email}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Participant 2 */}
+                  {selectedSubmission.participant2Name && (
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <p className="font-semibold text-gray-900 mb-2">Participant 2</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-600">Name</p>
+                          <p className="font-medium">{selectedSubmission.participant2Name}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Designation</p>
+                          <p className="font-medium">{selectedSubmission.participant2Designation}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Phone</p>
+                          <p className="font-medium">{selectedSubmission.participant2Phone}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Email</p>
+                          <p className="font-medium">{selectedSubmission.participant2Email}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600">Meal Preference</p>
+                        <p className="font-medium">{selectedSubmission.meal}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">MIM Member</p>
+                        <p className="font-medium">{selectedSubmission.member}</p>
+                      </div>
+                      {selectedSubmission.memberId && (
+                        <div>
+                          <p className="text-sm text-gray-600">Member ID</p>
+                          <p className="font-medium">{selectedSubmission.memberId}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment & Claim Details */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-3">Payment & Claim Details</h4>
+                <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-gray-600">Claim Process</p>
+                      <p className="font-medium">{selectedSubmission.claim}</p>
+                    </div>
+                    {selectedSubmission.voucher && (
+                      <div>
+                        <p className="text-sm text-gray-600">Voucher Code</p>
+                        <p className="font-medium">{selectedSubmission.voucher}</p>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm text-gray-600">Status</p>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        selectedSubmission.status === 'pending'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : selectedSubmission.status === 'confirmed'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {selectedSubmission.status}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Submitted</p>
+                      <p className="font-medium">{new Date(selectedSubmission.timestamp).toLocaleString()}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t px-6 py-4 flex justify-end gap-3">
+              <button
+                onClick={() => setSelectedSubmission(null)}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminDashboard;
