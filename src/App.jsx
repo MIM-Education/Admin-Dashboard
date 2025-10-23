@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Download, Filter, Users, FileText, Calendar, TrendingUp, Building } from 'lucide-react';
+import { Search, Download, Filter, Users, FileText, Calendar, TrendingUp, Mail, Phone, Building } from 'lucide-react';
 
-// Add password protection
-const ADMIN_PASSWORD = 'your-secure-password-here'; // Change this!
+// Google Apps Script Web App URL - Replace with your deployed script URL
+const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
 
-const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
+const AdminDashboard = () => {
   const [submissions, setSubmissions] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,54 +15,33 @@ const App = () => {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
-  // Check authentication on load
+  // Load data from storage on mount
   useEffect(() => {
-    const auth = sessionStorage.getItem('adminAuth');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-      loadSubmissions();
-    } else {
-      setLoading(false);
-    }
+    loadSubmissions();
   }, []);
 
+  // Apply filters whenever data or filters change
   useEffect(() => {
-    if (isAuthenticated) {
-      applyFilters();
-    }
+    applyFilters();
   }, [submissions, searchTerm, filterStatus, filterClaim, filterMember, dateRange]);
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('adminAuth', 'true');
-      loadSubmissions();
-    } else {
-      alert('Invalid password!');
-    }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    sessionStorage.removeItem('adminAuth');
-    setPassword('');
-  };
 
   const loadSubmissions = async () => {
     setLoading(true);
     try {
-      // Load from localStorage for demo
-      const stored = localStorage.getItem('form-submissions');
-      if (stored) {
-        setSubmissions(JSON.parse(stored));
+      // Try to load from persistent storage
+      const result = await window.storage.get('form-submissions');
+      if (result && result.value) {
+        const data = JSON.parse(result.value);
+        setSubmissions(data);
       } else {
+        // Initialize with sample data if no data exists
         const sampleData = generateSampleData();
         setSubmissions(sampleData);
-        localStorage.setItem('form-submissions', JSON.stringify(sampleData));
+        await window.storage.set('form-submissions', JSON.stringify(sampleData));
       }
     } catch (error) {
       console.error('Error loading submissions:', error);
+      // If storage fails, use sample data
       setSubmissions(generateSampleData());
     }
     setLoading(false);
@@ -153,6 +130,7 @@ const App = () => {
   const applyFilters = () => {
     let filtered = [...submissions];
 
+    // Search filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(sub =>
@@ -164,18 +142,22 @@ const App = () => {
       );
     }
 
+    // Status filter
     if (filterStatus !== 'all') {
       filtered = filtered.filter(sub => sub.status === filterStatus);
     }
 
+    // Claim filter
     if (filterClaim !== 'all') {
       filtered = filtered.filter(sub => sub.claim === filterClaim);
     }
 
+    // Member filter
     if (filterMember !== 'all') {
       filtered = filtered.filter(sub => sub.member === filterMember);
     }
 
+    // Date range filter
     if (dateRange.start || dateRange.end) {
       filtered = filtered.filter(sub => {
         const subDate = new Date(sub.timestamp);
@@ -191,12 +173,12 @@ const App = () => {
     setFilteredData(filtered);
   };
 
-  const updateStatus = (id, newStatus) => {
+  const updateStatus = async (id, newStatus) => {
     const updated = submissions.map(sub =>
       sub.id === id ? { ...sub, status: newStatus } : sub
     );
     setSubmissions(updated);
-    localStorage.setItem('form-submissions', JSON.stringify(updated));
+    await window.storage.set('form-submissions', JSON.stringify(updated));
   };
 
   const exportToCSV = () => {
@@ -235,46 +217,6 @@ const App = () => {
     totalParticipants: submissions.reduce((sum, s) => sum + parseInt(s.participantCount || 0), 0)
   };
 
-  // Login Screen
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md">
-          <div className="text-center mb-8">
-            <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FileText className="w-8 h-8 text-blue-600" />
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-600 mt-2">Enter password to continue</p>
-          </div>
-          
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter admin password"
-                required
-              />
-            </div>
-            
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium"
-            >
-              Login
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -296,21 +238,13 @@ const App = () => {
               <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
               <p className="text-sm text-gray-600">Short Course Form Submissions</p>
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={exportToCSV}
-                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-              >
-                <Download className="w-4 h-4" />
-                Export CSV
-              </button>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition"
-              >
-                Logout
-              </button>
-            </div>
+            <button
+              onClick={exportToCSV}
+              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              <Download className="w-4 h-4" />
+              Export CSV
+            </button>
           </div>
         </div>
       </div>
@@ -598,6 +532,7 @@ const App = () => {
                   Participant Details
                 </h4>
                 <div className="space-y-4">
+                  {/* Participant 1 */}
                   <div className="bg-gray-50 rounded-lg p-4">
                     <p className="font-semibold text-gray-900 mb-2">Participant 1</p>
                     <div className="grid grid-cols-2 gap-4">
