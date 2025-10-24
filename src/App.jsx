@@ -269,7 +269,7 @@ const AdminDashboard = () => {
     pending: submissions.filter(s => s.status === 'pending').length,
     cancelled: submissions.filter(s => s.status === 'cancelled').length,
     registered: submissions.filter(s => s.status === 'registered').length,
-    alreadyattended: submissions.filter(s => s.status === 'alreadyattended').length,
+    attended: submissions.filter(s => s.status === 'attended').length,
     members: submissions.filter(s => s.member === 'Yes').length,
     totalParticipants: submissions.reduce((sum, s) => sum + parseInt(s.participantCount || 0), 0)
   };
