@@ -25,28 +25,42 @@ const AdminDashboard = () => {
     applyFilters();
   }, [submissions, searchTerm, filterStatus, filterClaim, filterMember, dateRange]);
 
-  const loadSubmissions = async () => {
-    setLoading(true);
-    try {
-      // Try to load from persistent storage
-      const result = await window.storage.get('form-submissions');
-      if (result && result.value) {
-        const data = JSON.parse(result.value);
-        setSubmissions(data);
+  const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE';
+
+const loadSubmissions = async () => {
+  setLoading(true);
+  try {
+    const response = await fetch(GOOGLE_SCRIPT_URL);
+    const result = await response.json();
+    
+    if (result.status === 'success' && result.data) {
+      setSubmissions(result.data);
+      // Also save to localStorage as backup
+      localStorage.setItem('form-submissions', JSON.stringify(result.data));
+    } else {
+      // Fallback to localStorage
+      const stored = localStorage.getItem('form-submissions');
+      if (stored) {
+        setSubmissions(JSON.parse(stored));
       } else {
-        // Initialize with sample data if no data exists
-        const sampleData = generateSampleData();
-        setSubmissions(sampleData);
-        await window.storage.set('form-submissions', JSON.stringify(sampleData));
+        setSubmissions(generateSampleData());
       }
-    } catch (error) {
-      console.error('Error loading submissions:', error);
-      // If storage fails, use sample data
+    }
+  } catch (error) {
+    console.error('Error loading submissions:', error);
+    // Fallback to localStorage
+    const stored = localStorage.getItem('form-submissions');
+    if (stored) {
+      setSubmissions(JSON.parse(stored));
+    } else {
       setSubmissions(generateSampleData());
     }
-    setLoading(false);
-  };
+  }
+  setLoading(false);
+};
 
+  const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+  
   const generateSampleData = () => {
     return [
       {
