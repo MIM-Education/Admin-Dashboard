@@ -70,8 +70,7 @@ const AdminDashboard = () => {
           participant2Phone: item['Participant Phone2'] || item.participant2Phone || '',
           participant2Email: item['Participant Email2'] || item.participant2Email || '',
           participant2Designation: item['Participant Designation2'] || item.participant2Designation || '',
-          meal: item.Meal || item.meal || '',
-          meal: item.Meal2 || item.meal2 || '',
+          meal: item.Meal || item.meal || '',          
           member: item.Member || item.member || 'No',
           memberId: item['Member ID'] || item.memberId || '',
           claim: item.Claim || item.claim || '',
@@ -262,14 +261,14 @@ const AdminDashboard = () => {
       'Timestamp', 'Programme', 'Organisation', 'Address', 'PIC', 'Phone', 'Email',
       'Participant Count', 'P1 Name', 'P1 Phone', 'P1 Email', 'P1 Designation',
       'P2 Name', 'P2 Phone', 'P2 Email', 'P2 Designation',
-      'Meal', 'Meal2', 'Member','Trainer', 'Member ID', 'Claim', 'Voucher', 'Status', 'Assigned To'
+      'Meal', 'Member','Trainer', 'Member ID', 'Claim', 'Voucher', 'Status', 'Assigned To'
     ];
 
     const rows = filteredData.map(sub => [
       sub.timestamp, sub.programme, sub.organisation, sub.address, sub.pic, sub.phone, sub.email,
       sub.participantCount, sub.participant1Name, sub.participant1Phone, sub.participant1Email, sub.participant1Designation,
       sub.participant2Name || '', sub.participant2Phone || '', sub.participant2Email || '', sub.participant2Designation || '',
-      sub.meal, sub.meal2, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.status, 
+      sub.meal, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.status, 
       TEAM_MEMBERS.find(member => member.id === sub.assignedTo)?.name || 'Unassigned', sub.trainer || ''
     ]);
 
@@ -719,13 +718,9 @@ const AdminDashboard = () => {
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-gray-600">Meal Participant 1 Preference</p>
+                        <p className="text-sm text-gray-600">Meal Preference</p>
                         <p className="font-medium">{selectedSubmission.meal}</p>
-                      </div> 
-                      <div>
-                        <p className="text-sm text-gray-600">Meal Participant 2 Preference</p>
-                        <p className="font-medium">{selectedSubmission.meal2}</p>
-                      </div>
+                      </div>                       
                       <div>
                         <p className="text-sm text-gray-600">MIM Member</p>
                         <p className="font-medium">{selectedSubmission.member}</p>
