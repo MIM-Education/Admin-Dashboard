@@ -1,22 +1,35 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
-export const AuthContext = createContext();
+// Create Auth Context
+const AuthContext = createContext();
+
+// Hardcoded users for demo purposes
+const USERS = [
+  { username: 'admin', password: 'adminpass', role: 'admin', name: 'Admin User' },
+  { username: 'sales', password: 'salespass', role: 'sales', name: 'Sales User' },
+];
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // { role: 'admin'/'sales', name: 'User Name' }
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Attempt to load user from localStorage on mount
+    // Load user from localStorage on mount
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
   }, []);
 
-  const login = (role, name) => {
-    const newUser = { role, name };
-    setUser(newUser);
-    localStorage.setItem('user', JSON.stringify(newUser));
+  const login = (username, password) => {
+    const foundUser = USERS.find(
+      (u) => u.username === username && u.password === password
+    );
+    if (foundUser) {
+      setUser(foundUser);
+      localStorage.setItem('user', JSON.stringify(foundUser));
+      return true;
+    }
+    return false;
   };
 
   const logout = () => {
@@ -30,3 +43,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);
