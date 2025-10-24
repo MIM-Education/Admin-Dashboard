@@ -67,7 +67,7 @@ const AdminDashboard = () => {
         memberId: item['Member ID'] || item.memberId || '',
         claim: item.Claim || item.claim || '',
         voucher: item.Voucher || item.voucher || '',
-        status: item.Status || item.status || 'pending, Cancelled, Registered, Already Attended'
+        status: item.Status || item.status || 'pending, Cancelled, Registered, Attended'
       }));
 
       setSubmissions(transformedData);
@@ -408,7 +408,7 @@ const AdminDashboard = () => {
               <option value="pending">Pending</option>
               <option value="cancelled">Cancelled</option>
               <option value="registered">Registered</option>
-              <option value="alreadyattended">Already Attended</option>
+              <option value="attended">Attended</option>
             </select>
 
             <select
@@ -541,7 +541,7 @@ const AdminDashboard = () => {
                             ? 'bg-red-100 text-red-800'
                             : submission.status === 'registered'
                             ? 'bg-green-100 text-green-800'
-                            : submission.status === 'alreadyattended'
+                            : submission.status === 'attended'
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-red-100 text-red-800'
                         }`}
@@ -549,7 +549,7 @@ const AdminDashboard = () => {
               <option value="pending">Pending</option>
               <option value="cancelled">Cancelled</option>
               <option value="registered">Registered</option>
-              <option value="already attended">Already Attended</option>
+              <option value="attended">Attended</option>
                       </select>
                     </td>
                     <td className="px-3 py-3 whitespace-nowrap text-xs">
@@ -725,7 +725,7 @@ const AdminDashboard = () => {
                             ? 'bg-red-100 text-red-800'
                             : submission.status === 'registered'
                             ? 'bg-green-100 text-green-800'
-                            : submission.status === 'alreadyattended'
+                            : submission.status === 'attended'
                             ? 'bg-blue-100 text-blue-800'
                           : 'bg-red-100 text-red-800'
                       }`}>
