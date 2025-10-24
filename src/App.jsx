@@ -471,7 +471,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Submissions Table */}
+       {/* Submissions Table */}
         <div className="bg-white rounded-lg shadow">
           <div className="overflow-x-auto">
             <table className="w-full divide-y divide-gray-200">
@@ -496,7 +496,7 @@ const AdminDashboard = () => {
                     Claim
                   </th>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                    Job Status
+                    Status
                   </th>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Assigned To
@@ -548,7 +548,7 @@ const AdminDashboard = () => {
                           Non-Member
                         </span>
                       )}
-                         </td>
+                    </td>
                     <td className="px-3 py-3 text-xs text-gray-900 whitespace-nowrap">
                       <span className="max-w-[100px] truncate block" title={submission.claim}>
                         {submission.claim}
@@ -576,11 +576,6 @@ const AdminDashboard = () => {
                         <option value="attended">Attended</option>
                       </select>
                     </td>
-                    <td className="px-3 py-3 text-xs text-gray-900 whitespace-nowrap">
-                      <span className="max-w-[100px] truncate block" title={submission.claim}>
-                        {submission.claim}
-                      </span>
-                    </td>                    
                     <td className="px-3 py-3 whitespace-nowrap">
                       <select
                         value={submission.assignedTo}
