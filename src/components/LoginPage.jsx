@@ -1,4 +1,3 @@
-// src/components/LoginPage.jsx
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
@@ -13,7 +12,6 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (login(userId, password)) {
-      // Redirect to admin dashboard for admin (TM001), else sales dashboard
       navigate(userId === 'TM001' ? '/admin' : '/sales');
     } else {
       setError('Invalid credentials');
