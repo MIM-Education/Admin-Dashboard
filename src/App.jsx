@@ -25,11 +25,6 @@ const AdminDashboard = () => {
     applyFilters();
   }, [submissions, searchTerm, filterStatus, filterClaim, filterMember, dateRange]);
   // Sort by timestamp - latest first
-filtered.sort((a, b) => {
-  const dateA = new Date(a.timestamp);
-  const dateB = new Date(b.timestamp);
-  return dateB - dateA; // Descending order (newest first)
-});
 
   const loadSubmissions = async () => {
   setLoading(true);
@@ -223,6 +218,12 @@ filtered.sort((a, b) => {
         return true;
       });
     }
+
+    filtered.sort((a, b) => {
+  const dateA = new Date(a.timestamp);
+  const dateB = new Date(b.timestamp);
+  return dateB - dateA; // Descending order (newest first)
+});
 
     setFilteredData(filtered);
   };
