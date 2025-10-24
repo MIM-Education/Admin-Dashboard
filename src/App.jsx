@@ -720,7 +720,11 @@ const AdminDashboard = () => {
                       <div>
                         <p className="text-sm text-gray-600">Meal Preference</p>
                         <p className="font-medium">{selectedSubmission.meal}</p>
-                      </div>                       
+                      </div> 
+                      <div>
+                        <p className="text-sm text-gray-600">Trainer for TTT</p>
+                        <p className="font-medium">{selectedSubmission.trainer}</p>
+                      </div>
                       <div>
                         <p className="text-sm text-gray-600">MIM Member</p>
                         <p className="font-medium">{selectedSubmission.member}</p>
