@@ -548,7 +548,13 @@ const AdminDashboard = () => {
                           Non-Member
                         </span>
                       )}
-                      <td className="px-3 py-3 whitespace-nowrap">
+                         </td>
+                    <td className="px-3 py-3 text-xs text-gray-900 whitespace-nowrap">
+                      <span className="max-w-[100px] truncate block" title={submission.claim}>
+                        {submission.claim}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
                       <select
                         value={submission.status}
                         onChange={(e) => updateStatus(submission.id, e.target.value)}
@@ -569,7 +575,6 @@ const AdminDashboard = () => {
                         <option value="registered">Registered</option>
                         <option value="attended">Attended</option>
                       </select>
-                    </td>
                     </td>
                     <td className="px-3 py-3 text-xs text-gray-900 whitespace-nowrap">
                       <span className="max-w-[100px] truncate block" title={submission.claim}>
