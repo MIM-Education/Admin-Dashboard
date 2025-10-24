@@ -4,6 +4,15 @@ import { Search, Download, Filter, Users, FileText, Calendar, TrendingUp, Mail, 
 // Google Apps Script Web App URL - Replace with your deployed script URL
 const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
+// Sample team members for assignment
+const TEAM_MEMBERS = [
+  { id: 'unassigned', name: 'Unassigned' },
+  { id: 'TM001', name: 'John Smith' },
+  { id: 'TM002', name: 'Jane Doe' },
+  { id: 'TM003', name: 'Alex Wong' },
+  { id: 'TM004', name: 'Sarah Johnson' },
+];
+
 const AdminDashboard = () => {
   const [submissions, setSubmissions] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -24,56 +33,66 @@ const AdminDashboard = () => {
   useEffect(() => {
     applyFilters();
   }, [submissions, searchTerm, filterStatus, filterClaim, filterMember, dateRange]);
-  // Sort by timestamp - latest first
 
   const loadSubmissions = async () => {
-  setLoading(true);
-  try {
-    const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-    
-    if (!GOOGLE_SCRIPT_URL) {
-      console.warn('Google Script URL not configured, using sample data');
-      const sampleData = generateSampleData();
-      setSubmissions(sampleData);
-      setLoading(false);
-      return;
-    }
+    setLoading(true);
+    try {
+      const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+      
+      if (!GOOGLE_SCRIPT_URL) {
+        console.warn('Google Script URL not configured, using sample data');
+        const sampleData = generateSampleData();
+        setSubmissions(sampleData);
+        setLoading(false);
+        return;
+      }
 
-    const response = await fetch(GOOGLE_SCRIPT_URL);
-    const result = await response.json();
-    
-    if (result.status === 'success' && result.data) {
-      // Transform the data to match dashboard format
-      const transformedData = result.data.map((item, index) => ({
-        id: index + 1,
-        timestamp: item.Timestamp || item.timestamp || new Date().toISOString(),
-        programme: item.Programme || item.programme || '',
-        organisation: item.Organisation || item.organisation || '',
-        address: item.Address || item.address || '',
-        pic: item.PIC || item.pic || '',
-        phone: item.Phone || item.phone || '',
-        email: item.Email || item.email || '',
-        participantCount: item['Participant Number'] || item.participantCount || '1',
-        participant1Name: item['Participant Name'] || item.participant1Name || '',
-        participant1Phone: item['Participant Phone'] || item.participant1Phone || '',
-        participant1Email: item['Participant Email'] || item.participant1Email || '',
-        participant1Designation: item['Participant Designation'] || item.participant1Designation || '',
-        participant2Name: item['Participant Name2'] || item.participant2Name || '',
-        participant2Phone: item['Participant Phone2'] || item.participant2Phone || '',
-        participant2Email: item['Participant Email2'] || item.participant2Email || '',
-        participant2Designation: item['Participant Designation2'] || item.participant2Designation || '',
-        meal: item.Meal || item.meal || '',
-        member: item.Member || item.member || 'No',
-        memberId: item['Member ID'] || item.memberId || '',
-        claim: item.Claim || item.claim || '',
-        voucher: item.Voucher || item.voucher || '',
-        status: item.Status || item.status || 'pending, Cancelled, Registered, Attended'
-      }));
+      const response = await fetch(GOOGLE_SCRIPT_URL);
+      const result = await response.json();
+      
+      if (result.status === 'success' && result.data) {
+        // Transform the data to match dashboard format
+        const transformedData = result.data.map((item, index) => ({
+          id: index + 1,
+          timestamp: item.Timestamp || item.timestamp || new Date().toISOString(),
+          programme: item.Programme || item.programme || '',
+          organisation: item.Organisation || item.organisation || '',
+          address: item.Address || item.address || '',
+          pic: item.PIC || item.pic || '',
+          phone: item.Phone || item.phone || '',
+          email: item.Email || item.email || '',
+          participantCount: item['Participant Number'] || item.participantCount || '1',
+          participant1Name: item['Participant Name'] || item.participant1Name || '',
+          participant1Phone: item['Participant Phone'] || item.participant1Phone || '',
+          participant1Email: item['Participant Email'] || item.participant1Email || '',
+          participant1Designation: item['Participant Designation'] || item.participant1Designation || '',
+          participant2Name: item['Participant Name2'] || item.participant2Name || '',
+          participant2Phone: item['Participant Phone2'] || item.participant2Phone || '',
+          participant2Email: item['Participant Email2'] || item.participant2Email || '',
+          participant2Designation: item['Participant Designation2'] || item.participant2Designation || '',
+          meal: item.Meal || item.meal || '',
+          member: item.Member || item.member || 'No',
+          memberId: item['Member ID'] || item.memberId || '',
+          claim: item.Claim || item.claim || '',
+          voucher: item.Voucher || item.voucher || '',
+          status: item.Status || item.status || 'pending',
+          assignedTo: item.AssignedTo || item.assignedTo || 'unassigned'
+        }));
 
-      setSubmissions(transformedData);
-      // Save to localStorage as backup
-      localStorage.setItem('form-submissions', JSON.stringify(transformedData));
-    } else {
+        setSubmissions(transformedData);
+        // Save to localStorage as backup
+        localStorage.setItem('form-submissions', JSON.stringify(transformedData));
+      } else {
+        // Fallback to localStorage or sample data
+        const stored = localStorage.getItem('form-submissions');
+        if (stored) {
+          setSubmissions(JSON.parse(stored));
+        } else {
+          setSubmissions(generateSampleData());
+        }
+      }
+    } catch (error) {
+      console.error('Error loading submissions:', error);
       // Fallback to localStorage or sample data
       const stored = localStorage.getItem('form-submissions');
       if (stored) {
@@ -82,19 +101,8 @@ const AdminDashboard = () => {
         setSubmissions(generateSampleData());
       }
     }
-  } catch (error) {
-    console.error('Error loading submissions:', error);
-    // Fallback to localStorage or sample data
-    const stored = localStorage.getItem('form-submissions');
-    if (stored) {
-      setSubmissions(JSON.parse(stored));
-    } else {
-      setSubmissions(generateSampleData());
-    }
-  }
-  setLoading(false);
-};
-  
+    setLoading(false);
+  };
   
   const generateSampleData = () => {
     return [
@@ -121,7 +129,8 @@ const AdminDashboard = () => {
         memberId: 'MIM12345',
         claim: 'HRDC Claimable',
         voucher: '',
-        status: 'pending'
+        status: 'pending',
+        assignedTo: 'TM001'
       },
       {
         id: 2,
@@ -146,7 +155,8 @@ const AdminDashboard = () => {
         memberId: '',
         claim: 'Own',
         voucher: 'DISCOUNT10',
-        status: 'confirmed'
+        status: 'confirmed',
+        assignedTo: 'TM002'
       },
       {
         id: 3,
@@ -171,7 +181,8 @@ const AdminDashboard = () => {
         memberId: 'MIM67890',
         claim: 'HRDC Claimable',
         voucher: '',
-        status: 'pending'
+        status: 'pending',
+        assignedTo: 'unassigned'
       }
     ];
   };
@@ -220,10 +231,10 @@ const AdminDashboard = () => {
     }
 
     filtered.sort((a, b) => {
-  const dateA = new Date(a.timestamp);
-  const dateB = new Date(b.timestamp);
-  return dateB - dateA; // Descending order (newest first)
-});
+      const dateA = new Date(a.timestamp);
+      const dateB = new Date(b.timestamp);
+      return dateB - dateA; // Descending order (newest first)
+    });
 
     setFilteredData(filtered);
   };
@@ -236,19 +247,28 @@ const AdminDashboard = () => {
     await window.storage.set('form-submissions', JSON.stringify(updated));
   };
 
+  const updateAssignment = async (id, assignedTo) => {
+    const updated = submissions.map(sub =>
+      sub.id === id ? { ...sub, assignedTo } : sub
+    );
+    setSubmissions(updated);
+    await window.storage.set('form-submissions', JSON.stringify(updated));
+  };
+
   const exportToCSV = () => {
     const headers = [
       'Timestamp', 'Programme', 'Organisation', 'Address', 'PIC', 'Phone', 'Email',
       'Participant Count', 'P1 Name', 'P1 Phone', 'P1 Email', 'P1 Designation',
       'P2 Name', 'P2 Phone', 'P2 Email', 'P2 Designation',
-      'Meal', 'Member', 'Member ID', 'Claim', 'Voucher', 'Status'
+      'Meal', 'Member', 'Member ID', 'Claim', 'Voucher', 'Status', 'Assigned To'
     ];
 
     const rows = filteredData.map(sub => [
       sub.timestamp, sub.programme, sub.organisation, sub.address, sub.pic, sub.phone, sub.email,
       sub.participantCount, sub.participant1Name, sub.participant1Phone, sub.participant1Email, sub.participant1Designation,
       sub.participant2Name || '', sub.participant2Phone || '', sub.participant2Email || '', sub.participant2Designation || '',
-      sub.meal, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.status
+      sub.meal, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.status,
+      TEAM_MEMBERS.find(member => member.id === sub.assignedTo)?.name || 'Unassigned'
     ]);
 
     const csvContent = [
@@ -478,6 +498,9 @@ const AdminDashboard = () => {
                     Status
                   </th>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                    Assigned To
+                  </th>
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Actions
                   </th>
                 </tr>
@@ -545,11 +568,22 @@ const AdminDashboard = () => {
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-red-100 text-red-800'
                         }`}
-                      > 
-              <option value="pending">Pending</option>
-              <option value="cancelled">Cancelled</option>
-              <option value="registered">Registered</option>
-              <option value="attended">Attended</option>
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="registered">Registered</option>
+                        <option value="attended">Attended</option>
+                      </select>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      <select
+                        value={submission.assignedTo}
+                        onChange={(e) => updateAssignment(submission.id, e.target.value)}
+                        className="text-xs rounded-full px-2 py-1 font-medium w-full bg-indigo-100 text-indigo-800"
+                      >
+                        {TEAM_MEMBERS.map(member => (
+                          <option key={member.id} value={member.id}>{member.name}</option>
+                        ))}
                       </select>
                     </td>
                     <td className="px-3 py-3 whitespace-nowrap text-xs">
@@ -721,16 +755,22 @@ const AdminDashboard = () => {
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         selectedSubmission.status === 'pending'
                           ? 'bg-yellow-100 text-yellow-800'
-                          : submission.status === 'cancelled'
+                          : selectedSubmission.status === 'cancelled'
                             ? 'bg-red-100 text-red-800'
-                            : submission.status === 'registered'
+                            : selectedSubmission.status === 'registered'
                             ? 'bg-green-100 text-green-800'
-                            : submission.status === 'attended'
+                            : selectedSubmission.status === 'attended'
                             ? 'bg-blue-100 text-blue-800'
-                          : 'bg-red-100 text-red-800'
+                            : 'bg-red-100 text-red-800'
                       }`}>
                         {selectedSubmission.status}
                       </span>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Assigned To</p>
+                      <p className="font-medium">
+                        {TEAM_MEMBERS.find(member => member.id === selectedSubmission.assignedTo)?.name || 'Unassigned'}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Submitted</p>
