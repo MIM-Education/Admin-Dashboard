@@ -352,8 +352,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Already Attended</p>
-                <p className="text-2xl font-bold text-blue-600">{stats.alreadyattended}</p>
+                <p className="text-sm text-gray-600">Attended</p>
+                <p className="text-2xl font-bold text-blue-600">{stats.attended}</p>
               </div>
               <TrendingUp className="w-8 h-8 text-blue-600" />
             </div>
