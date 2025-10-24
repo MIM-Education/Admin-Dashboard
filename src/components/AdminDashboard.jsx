@@ -1,4 +1,3 @@
-// src/components/AdminDashboard.jsx
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Download, Filter, Users, FileText, Calendar, TrendingUp, Building } from 'lucide-react';
@@ -227,6 +226,18 @@ const AdminDashboard = () => {
     );
     setSubmissions(updated);
     localStorage.setItem('form-submissions', JSON.stringify(updated));
+
+    if (GOOGLE_SCRIPT_URL) {
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ id, status: newStatus }),
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } catch (error) {
+        console.error('Error updating status:', error);
+      }
+    }
   };
 
   const updateAssignment = async (id, assignedTo) => {
@@ -235,6 +246,18 @@ const AdminDashboard = () => {
     );
     setSubmissions(updated);
     localStorage.setItem('form-submissions', JSON.stringify(updated));
+
+    if (GOOGLE_SCRIPT_URL) {
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ id, assignedTo }),
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } catch (error) {
+        console.error('Error updating assignment:', error);
+      }
+    }
   };
 
   const updateRemarks = async (id, remarks) => {
@@ -243,6 +266,18 @@ const AdminDashboard = () => {
     );
     setSubmissions(updated);
     localStorage.setItem('form-submissions', JSON.stringify(updated));
+
+    if (GOOGLE_SCRIPT_URL) {
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ id, remarks }),
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } catch (error) {
+        console.error('Error updating remarks:', error);
+      }
+    }
   };
 
   const exportToCSV = () => {
