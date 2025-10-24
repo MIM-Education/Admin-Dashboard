@@ -358,7 +358,7 @@ const AdminDashboard = () => {
             <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             <div className="relative">
               <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
@@ -366,14 +366,14 @@ const AdminDashboard = () => {
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -384,7 +384,7 @@ const AdminDashboard = () => {
             <select
               value={filterClaim}
               onChange={(e) => setFilterClaim(e.target.value)}
-              className="px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             >
               <option value="all">All Claims</option>
               <option value="HRDC Claimable">HRDC Claimable</option>
@@ -394,58 +394,60 @@ const AdminDashboard = () => {
             <select
               value={filterMember}
               onChange={(e) => setFilterMember(e.target.value)}
-              className="px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             >
               <option value="all">All Members</option>
               <option value="Yes">Members Only</option>
               <option value="No">Non-Members</option>
             </select>
 
-            <div className="flex gap-2">
+            <div className="grid grid-cols-2 gap-2 xl:col-span-1 md:col-span-2 lg:col-span-1">
               <input
                 type="date"
                 value={dateRange.start}
                 onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-                className="px-2 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-2 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Start"
               />
               <input
                 type="date"
                 value={dateRange.end}
                 onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-                className="px-2 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-2 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="End"
               />
             </div>
           </div>
         </div>
 
         {/* Submissions Table */}
-        <div className="bg-white rounded-lg shadow overflow-auto">
+        <div className="bg-white rounded-lg shadow">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Timestamp
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Organisation
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Person in Charge
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Participants
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Member
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Claim
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Actions
                   </th>
                 </tr>
@@ -453,41 +455,56 @@ const AdminDashboard = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredData.map((submission) => (
                   <tr key={submission.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {new Date(submission.timestamp).toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      <div className="font-medium">{submission.organisation}</div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      <div className="font-medium">{submission.pic}</div>
-                      <div className="text-gray-500 text-xs">{submission.email}</div>
-                      <div className="text-gray-500 text-xs">{submission.phone}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {submission.participantCount} participant(s)
+                    <td className="px-3 py-3 text-xs text-gray-900 whitespace-nowrap">
+                      {new Date(submission.timestamp).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                      })}
+                      <br />
+                      <span className="text-gray-500">
+                        {new Date(submission.timestamp).toLocaleTimeString('en-GB', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <td className="px-3 py-3 text-xs text-gray-900">
+                      <div className="font-medium max-w-[150px] truncate" title={submission.organisation}>
+                        {submission.organisation}
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 text-xs text-gray-900">
+                      <div className="font-medium max-w-[120px] truncate" title={submission.pic}>{submission.pic}</div>
+                      <div className="text-gray-500 max-w-[120px] truncate" title={submission.email}>{submission.email}</div>
+                      <div className="text-gray-500 whitespace-nowrap">{submission.phone}</div>
+                    </td>
+                    <td className="px-3 py-3 text-xs text-gray-900 whitespace-nowrap">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {submission.participantCount} pax
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 text-xs whitespace-nowrap">
                       {submission.member === 'Yes' ? (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                           Member
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                           Non-Member
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {submission.claim}
+                    <td className="px-3 py-3 text-xs text-gray-900 whitespace-nowrap">
+                      <span className="max-w-[100px] truncate block" title={submission.claim}>
+                        {submission.claim}
+                      </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 py-3 whitespace-nowrap">
                       <select
                         value={submission.status}
                         onChange={(e) => updateStatus(submission.id, e.target.value)}
-                        className={`text-sm rounded-full px-3 py-1 font-medium ${
+                        className={`text-xs rounded-full px-2 py-1 font-medium w-full ${
                           submission.status === 'pending'
                             ? 'bg-yellow-100 text-yellow-800'
                             : submission.status === 'confirmed'
@@ -500,12 +517,12 @@ const AdminDashboard = () => {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <td className="px-3 py-3 whitespace-nowrap text-xs">
                       <button
                         onClick={() => setSelectedSubmission(submission)}
                         className="text-blue-600 hover:text-blue-900 font-medium"
                       >
-                        View Details
+                        View
                       </button>
                     </td>
                   </tr>
