@@ -567,7 +567,7 @@ const AdminDashboard = () => {
                             ? 'bg-green-100 text-green-800'
                             : submission.status === 'attended'
                             ? 'bg-blue-100 text-blue-800'
-                            : 'bg-red-100 text-red-800'
+                            : 'bg-white-100 text-black-800'
                         }`}
                       >
                         <option value="pending">Pending</option>
@@ -766,7 +766,7 @@ const AdminDashboard = () => {
                             ? 'bg-green-100 text-green-800'
                             : selectedSubmission.status === 'attended'
                             ? 'bg-blue-100 text-blue-800'
-                            : 'bg-red-100 text-red-800'
+                            : 'bg-white-100 text-black-800'
                       }`}>
                         {selectedSubmission.status}
                       </span>
