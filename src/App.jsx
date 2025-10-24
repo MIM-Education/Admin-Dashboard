@@ -330,10 +330,30 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Confirmed</p>
-                <p className="text-2xl font-bold text-green-600">{stats.confirmed}</p>
+                <p className="text-sm text-gray-600">Cancelled</p>
+                <p className="text-2xl font-bold text-red-600">{stats.cancelled}</p>
+              </div>
+              <Calendar className="w-8 h-8 text-red-600" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Registered</p>
+                <p className="text-2xl font-bold text-green-600">{stats.registered}</p>
               </div>
               <TrendingUp className="w-8 h-8 text-green-600" />
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Already Attended</p>
+                <p className="text-2xl font-bold text-blue-600">{stats.alreadyattended}</p>
+              </div>
+              <TrendingUp className="w-8 h-8 text-blue-600" />
             </div>
           </div>
 
@@ -386,7 +406,7 @@ const AdminDashboard = () => {
               <option value="pending">Pending</option>
               <option value="cancelled">Cancelled</option>
               <option value="registered">Registered</option>
-              <option value="already attended">Already Attended</option>
+              <option value="alreadyattended">Already Attended</option>
             </select>
 
             <select
