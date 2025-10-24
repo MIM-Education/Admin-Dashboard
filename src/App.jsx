@@ -25,20 +25,55 @@ const AdminDashboard = () => {
     applyFilters();
   }, [submissions, searchTerm, filterStatus, filterClaim, filterMember, dateRange]);
 
-  const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-
-const loadSubmissions = async () => {
+  const loadSubmissions = async () => {
   setLoading(true);
   try {
+    const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+    
+    if (!GOOGLE_SCRIPT_URL) {
+      console.warn('Google Script URL not configured, using sample data');
+      const sampleData = generateSampleData();
+      setSubmissions(sampleData);
+      setLoading(false);
+      return;
+    }
+
     const response = await fetch(GOOGLE_SCRIPT_URL);
     const result = await response.json();
     
     if (result.status === 'success' && result.data) {
-      setSubmissions(result.data);
-      // Also save to localStorage as backup
-      localStorage.setItem('form-submissions', JSON.stringify(result.data));
+      // Transform the data to match dashboard format
+      const transformedData = result.data.map((item, index) => ({
+        id: index + 1,
+        timestamp: item.Timestamp || item.timestamp || new Date().toISOString(),
+        programme: item.Programme || item.programme || '',
+        organisation: item.Organisation || item.organisation || '',
+        address: item.Address || item.address || '',
+        pic: item.PIC || item.pic || '',
+        phone: item.Phone || item.phone || '',
+        email: item.Email || item.email || '',
+        participantCount: item['Participant Number'] || item.participantCount || '1',
+        participant1Name: item['Participant Name'] || item.participant1Name || '',
+        participant1Phone: item['Participant Phone'] || item.participant1Phone || '',
+        participant1Email: item['Participant Email'] || item.participant1Email || '',
+        participant1Designation: item['Participant Designation'] || item.participant1Designation || '',
+        participant2Name: item['Participant Name2'] || item.participant2Name || '',
+        participant2Phone: item['Participant Phone2'] || item.participant2Phone || '',
+        participant2Email: item['Participant Email2'] || item.participant2Email || '',
+        participant2Designation: item['Participant Designation2'] || item.participant2Designation || '',
+        meal: item.Meal || item.meal || '',
+        member: item.Member || item.member || 'No',
+        memberId: item['Member ID'] || item.memberId || '',
+        claim: item.Claim || item.claim || '',
+        voucher: item.Voucher || item.voucher || '',
+        status: item.status || item.Status || 'pending, Cancelled, Registered, Already Attended'
+      }));
+
+      setSubmissions(transformedData);
+      // Save to localStorage as backup
+      localStorage.setItem('form-submissions', JSON.stringify(transformedData));
     } else {
-      // Fallback to localStorage
+      // Fallback to localStorage or sample data
       const stored = localStorage.getItem('form-submissions');
       if (stored) {
         setSubmissions(JSON.parse(stored));
@@ -48,7 +83,7 @@ const loadSubmissions = async () => {
     }
   } catch (error) {
     console.error('Error loading submissions:', error);
-    // Fallback to localStorage
+    // Fallback to localStorage or sample data
     const stored = localStorage.getItem('form-submissions');
     if (stored) {
       setSubmissions(JSON.parse(stored));
