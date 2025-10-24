@@ -50,7 +50,7 @@ const AdminDashboard = () => {
       const response = await fetch(GOOGLE_SCRIPT_URL);
       const result = await response.json();
       
-      if (result.status === 'success' && result.data) {
+      if (result.jobStatus === 'success' && result.data) {
         // Transform the data to match dashboard format
         const transformedData = result.data.map((item, index) => ({
           id: index + 1,
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
           memberId: item['Member ID'] || item.memberId || '',
           claim: item.Claim || item.claim || '',
           voucher: item.Voucher || item.voucher || '',
-          status: item.Status || item.status || 'pending',
+          jobStatus: item.JobStatus || item.jobStatus || '',
           trainer: item.Trainer || item.trainer || '',
           assignedTo: item.AssignedTo || item.assignedTo || 'unassigned'
         }));
@@ -205,7 +205,7 @@ const AdminDashboard = () => {
 
     // Status filter
     if (filterStatus !== 'all') {
-      filtered = filtered.filter(sub => sub.status === filterStatus);
+      filtered = filtered.filter(sub => sub.jobStatus === filterStatus);
     }
 
     // Claim filter
@@ -242,7 +242,7 @@ const AdminDashboard = () => {
 
   const updateStatus = async (id, newStatus) => {
     const updated = submissions.map(sub =>
-      sub.id === id ? { ...sub, status: newStatus } : sub
+      sub.id === id ? { ...sub, jobStatus: newStatus } : sub
     );
     setSubmissions(updated);
     await window.storage.set('form-submissions', JSON.stringify(updated));
@@ -261,14 +261,14 @@ const AdminDashboard = () => {
       'Timestamp', 'Programme', 'Organisation', 'Address', 'PIC', 'Phone', 'Email',
       'Participant Count', 'P1 Name', 'P1 Phone', 'P1 Email', 'P1 Designation',
       'P2 Name', 'P2 Phone', 'P2 Email', 'P2 Designation',
-      'Meal', 'Member','Trainer', 'Member ID', 'Claim', 'Voucher', 'Status', 'Assigned To'
+      'Meal', 'Member','Trainer', 'Member ID', 'Claim', 'Voucher', 'JobStatus', 'Assigned To'
     ];
 
     const rows = filteredData.map(sub => [
       sub.timestamp, sub.programme, sub.organisation, sub.address, sub.pic, sub.phone, sub.email,
       sub.participantCount, sub.participant1Name, sub.participant1Phone, sub.participant1Email, sub.participant1Designation,
       sub.participant2Name || '', sub.participant2Phone || '', sub.participant2Email || '', sub.participant2Designation || '',
-      sub.meal, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.status, 
+      sub.meal, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.jobStatus, 
       TEAM_MEMBERS.find(member => member.id === sub.assignedTo)?.name || 'Unassigned', sub.trainer || ''
     ]);
 
@@ -287,10 +287,10 @@ const AdminDashboard = () => {
 
   const stats = {
     total: submissions.length,
-    pending: submissions.filter(s => s.status === 'pending').length,
-    cancelled: submissions.filter(s => s.status === 'cancelled').length,
-    registered: submissions.filter(s => s.status === 'registered').length,
-    attended: submissions.filter(s => s.status === 'attended').length,
+    pending: submissions.filter(s => s.jobStatus === 'pending').length,
+    cancelled: submissions.filter(s => s.jobStatus === 'cancelled').length,
+    registered: submissions.filter(s => s.jobStatus === 'registered').length,
+    attended: submissions.filter(s => s.jobStatus === 'attended').length,
     members: submissions.filter(s => s.member === 'Yes').length,
     totalParticipants: submissions.reduce((sum, s) => sum + parseInt(s.participantCount || 0), 0)
   };
@@ -496,7 +496,7 @@ const AdminDashboard = () => {
                     Claim
                   </th>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                    Status
+                    Job Status
                   </th>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     Assigned To
@@ -556,16 +556,16 @@ const AdminDashboard = () => {
                     </td>
                     <td className="px-3 py-3 whitespace-nowrap">
                       <select
-                        value={submission.status}
+                        value={submission.jobStatus}
                         onChange={(e) => updateStatus(submission.id, e.target.value)}
                         className={`text-xs rounded-full px-2 py-1 font-medium w-full ${
-                          submission.status === 'pending'
+                          submission.jobStatus === 'pending'
                             ? 'bg-yellow-100 text-yellow-800'
-                            : submission.status === 'cancelled'
+                            : submission.jobStatus === 'cancelled'
                             ? 'bg-red-100 text-red-800'
-                            : submission.status === 'registered'
+                            : submission.jobStatus === 'registered'
                             ? 'bg-green-100 text-green-800'
-                            : submission.status === 'attended'
+                            : submission.jobStatus === 'attended'
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-red-100 text-red-800'
                         }`}
@@ -752,19 +752,19 @@ const AdminDashboard = () => {
                       </div>
                     )}
                     <div>
-                      <p className="text-sm text-gray-600">Status</p>
+                      <p className="text-sm text-gray-600">Job Status</p>
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        selectedSubmission.status === 'pending'
+                        selectedSubmission.jobStatus === 'pending'
                           ? 'bg-yellow-100 text-yellow-800'
-                          : selectedSubmission.status === 'cancelled'
+                          : selectedSubmission.jobStatus === 'cancelled'
                             ? 'bg-red-100 text-red-800'
-                            : selectedSubmission.status === 'registered'
+                            : selectedSubmission.jobStatus === 'registered'
                             ? 'bg-green-100 text-green-800'
-                            : selectedSubmission.status === 'attended'
+                            : selectedSubmission.jobStatus === 'attended'
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-red-100 text-red-800'
                       }`}>
-                        {selectedSubmission.status}
+                        {selectedSubmission.jobStatus}
                       </span>
                     </div>
                     <div>
