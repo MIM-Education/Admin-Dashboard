@@ -1,4 +1,3 @@
-// src/context/AuthContext.jsx
 import { createContext, useState } from 'react';
 
 export const AuthContext = createContext();
@@ -15,9 +14,8 @@ export const AuthProvider = ({ children }) => {
   ];
 
   const login = (userId, password) => {
-    // Simple auth simulation (replace with real auth in production)
     const foundUser = TEAM_MEMBERS.find(member => member.id === userId);
-    if (foundUser && password === 'password') { // Replace 'password' with secure auth
+    if (foundUser && password === 'password') {
       setUser(foundUser);
       return true;
     }
