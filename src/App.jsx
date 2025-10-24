@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Download, Filter, Users, FileText, Calendar, TrendingUp, Mail, Phone, Building } from 'lucide-react';
 
 // Google Apps Script Web App URL - Replace with your deployed script URL
-const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxluQku4BvP2JL__NemFGFTsSTAPzyz1Z8-7U3e2wuhQO_vCpg_5d8Y-n-oMwtQVPk8/exec';
 
 const AdminDashboard = () => {
   const [submissions, setSubmissions] = useState([]);
