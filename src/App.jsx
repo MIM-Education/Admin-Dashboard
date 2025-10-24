@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import LoginPage from './components/LoginPage';
@@ -9,7 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 const App = () => {
   return (
     <AuthProvider>
-      <BrowserRouter basename={import.meta.env.VITE_BASE_URL || ''}>
+      <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route
