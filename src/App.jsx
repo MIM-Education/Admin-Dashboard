@@ -25,7 +25,7 @@ const AdminDashboard = () => {
     applyFilters();
   }, [submissions, searchTerm, filterStatus, filterClaim, filterMember, dateRange]);
 
-  const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE';
+  const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
 const loadSubmissions = async () => {
   setLoading(true);
@@ -58,8 +58,7 @@ const loadSubmissions = async () => {
   }
   setLoading(false);
 };
-
-  const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+  
   
   const generateSampleData = () => {
     return [
