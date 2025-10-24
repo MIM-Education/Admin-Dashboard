@@ -1,0 +1,21 @@
+// src/components/ProtectedRoute.jsx
+import { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+
+const ProtectedRoute = ({ children, requireAdmin }) => {
+  const { user } = useContext(AuthContext);
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Assuming TM001 is admin (modify as needed)
+  if (requireAdmin && user.id !== 'TM001') {
+    return <Navigate to="/sales" replace />;
+  }
+
+  return children;
+};
+
+export default ProtectedRoute;
