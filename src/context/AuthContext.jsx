@@ -1,31 +1,31 @@
-import { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // { role: 'admin'/'sales', name: 'User Name' }
 
-  const TEAM_MEMBERS = [
-    { id: 'unassigned', name: 'Unassigned' },
-    { id: 'TM001', name: 'John Smith' },
-    { id: 'TM002', name: 'Jane Doe' },
-    { id: 'TM003', name: 'Alex Wong' },
-    { id: 'TM004', name: 'Sarah Johnson' },
-  ];
-
-  const login = (userId, password) => {
-    const foundUser = TEAM_MEMBERS.find(member => member.id === userId);
-    if (foundUser && password === 'password') {
-      setUser(foundUser);
-      return true;
+  useEffect(() => {
+    // Attempt to load user from localStorage on mount
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
-    return false;
+  }, []);
+
+  const login = (role, name) => {
+    const newUser = { role, name };
+    setUser(newUser);
+    localStorage.setItem('user', JSON.stringify(newUser));
   };
 
-  const logout = () => setUser(null);
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, TEAM_MEMBERS }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
