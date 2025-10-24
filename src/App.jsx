@@ -78,7 +78,7 @@ const AdminDashboard = () => {
           voucher: item.Voucher || item.voucher || '',
           status: item.Status || item.status || 'pending',
           trainer: item.Trainer || item.trainer || '',
-          assignedTo: item.['Assigned To'] || item.assignedTo || 'unassigned'
+          assignedTo: item.'AssignedTo' || item.assignedTo || 'unassigned'
         }));
 
         setSubmissions(transformedData);
