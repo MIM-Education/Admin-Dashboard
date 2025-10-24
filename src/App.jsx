@@ -384,8 +384,9 @@ const AdminDashboard = () => {
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
               <option value="cancelled">Cancelled</option>
+              <option value="registered">Registered</option>
+              <option value="already attended">Already Attended</option>
             </select>
 
             <select
@@ -519,9 +520,10 @@ const AdminDashboard = () => {
                             : 'bg-red-100 text-red-800'
                         }`}
                       >
-                        <option value="pending">Pending</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="cancelled">Cancelled</option>
+              <option value="pending">Pending</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="registered">Registered</option>
+              <option value="already attended">Already Attended</option>
                       </select>
                     </td>
                     <td className="px-3 py-3 whitespace-nowrap text-xs">
