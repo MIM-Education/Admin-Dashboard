@@ -67,7 +67,7 @@ const AdminDashboard = () => {
         memberId: item['Member ID'] || item.memberId || '',
         claim: item.Claim || item.claim || '',
         voucher: item.Voucher || item.voucher || '',
-        status: item.status || item.Status || 'pending, Cancelled, Registered, Already Attended'
+        status: item.Status || item.status || 'pending, Cancelled, Registered, Already Attended'
       }));
 
       setSubmissions(transformedData);
