@@ -50,7 +50,7 @@ const AdminDashboard = () => {
       const response = await fetch(GOOGLE_SCRIPT_URL);
       const result = await response.json();
       
-      if (result.jobStatus === 'success' && result.data) {
+      if (result.status === 'success' && result.data) {
         // Transform the data to match dashboard format
         const transformedData = result.data.map((item, index) => ({
           id: index + 1,
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
           memberId: item['Member ID'] || item.memberId || '',
           claim: item.Claim || item.claim || '',
           voucher: item.Voucher || item.voucher || '',
-          jobStatus: item.JobStatus || item.jobStatus || '',
+          status: item.JobStatus || item.status || '',
           trainer: item.Trainer || item.trainer || '',
           assignedTo: item.AssignedTo || item.assignedTo || 'unassigned'
         }));
@@ -205,7 +205,7 @@ const AdminDashboard = () => {
 
     // Status filter
     if (filterStatus !== 'all') {
-      filtered = filtered.filter(sub => sub.jobStatus === filterStatus);
+      filtered = filtered.filter(sub => sub.status === filterStatus);
     }
 
     // Claim filter
@@ -242,7 +242,7 @@ const AdminDashboard = () => {
 
   const updateStatus = async (id, newStatus) => {
     const updated = submissions.map(sub =>
-      sub.id === id ? { ...sub, jobStatus: newStatus } : sub
+      sub.id === id ? { ...sub, status: newStatus } : sub
     );
     setSubmissions(updated);
     await window.storage.set('form-submissions', JSON.stringify(updated));
@@ -268,7 +268,7 @@ const AdminDashboard = () => {
       sub.timestamp, sub.programme, sub.organisation, sub.address, sub.pic, sub.phone, sub.email,
       sub.participantCount, sub.participant1Name, sub.participant1Phone, sub.participant1Email, sub.participant1Designation,
       sub.participant2Name || '', sub.participant2Phone || '', sub.participant2Email || '', sub.participant2Designation || '',
-      sub.meal, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.jobStatus, 
+      sub.meal, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.status, 
       TEAM_MEMBERS.find(member => member.id === sub.assignedTo)?.name || 'Unassigned', sub.trainer || ''
     ]);
 
@@ -287,10 +287,10 @@ const AdminDashboard = () => {
 
   const stats = {
     total: submissions.length,
-    pending: submissions.filter(s => s.jobStatus === 'pending').length,
-    cancelled: submissions.filter(s => s.jobStatus === 'cancelled').length,
-    registered: submissions.filter(s => s.jobStatus === 'registered').length,
-    attended: submissions.filter(s => s.jobStatus === 'attended').length,
+    pending: submissions.filter(s => s.status === 'pending').length,
+    cancelled: submissions.filter(s => s.status === 'cancelled').length,
+    registered: submissions.filter(s => s.status === 'registered').length,
+    attended: submissions.filter(s => s.status === 'attended').length,
     members: submissions.filter(s => s.member === 'Yes').length,
     totalParticipants: submissions.reduce((sum, s) => sum + parseInt(s.participantCount || 0), 0)
   };
@@ -556,16 +556,16 @@ const AdminDashboard = () => {
                     </td>
                     <td className="px-3 py-3 whitespace-nowrap">
                       <select
-                        value={submission.jobStatus}
+                        value={submission.status}
                         onChange={(e) => updateStatus(submission.id, e.target.value)}
                         className={`text-xs rounded-full px-2 py-1 font-medium w-full ${
-                          submission.jobStatus === 'pending'
+                          submission.status === 'pending'
                             ? 'bg-yellow-100 text-yellow-800'
-                            : submission.jobStatus === 'cancelled'
+                            : submission.status === 'cancelled'
                             ? 'bg-red-100 text-red-800'
-                            : submission.jobStatus === 'registered'
+                            : submission.status === 'registered'
                             ? 'bg-green-100 text-green-800'
-                            : submission.jobStatus === 'attended'
+                            : submission.status === 'attended'
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-red-100 text-red-800'
                         }`}
@@ -754,17 +754,17 @@ const AdminDashboard = () => {
                     <div>
                       <p className="text-sm text-gray-600">Job Status</p>
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        selectedSubmission.jobStatus === 'pending'
+                        selectedSubmission.status === 'pending'
                           ? 'bg-yellow-100 text-yellow-800'
-                          : selectedSubmission.jobStatus === 'cancelled'
+                          : selectedSubmission.status === 'cancelled'
                             ? 'bg-red-100 text-red-800'
-                            : selectedSubmission.jobStatus === 'registered'
+                            : selectedSubmission.status === 'registered'
                             ? 'bg-green-100 text-green-800'
-                            : selectedSubmission.jobStatus === 'attended'
+                            : selectedSubmission.status === 'attended'
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-red-100 text-red-800'
                       }`}>
-                        {selectedSubmission.jobStatus}
+                        {selectedSubmission.status}
                       </span>
                     </div>
                     <div>
