@@ -66,17 +66,19 @@ const AdminDashboard = () => {
           participant1Phone: item['Participant Phone'] || item.participant1Phone || '',
           participant1Email: item['Participant Email'] || item.participant1Email || '',
           participant1Designation: item['Participant Designation'] || item.participant1Designation || '',
+          meal: item.Meal || item.meal || '',
           participant2Name: item['Participant Name2'] || item.participant2Name || '',
           participant2Phone: item['Participant Phone2'] || item.participant2Phone || '',
           participant2Email: item['Participant Email2'] || item.participant2Email || '',
           participant2Designation: item['Participant Designation2'] || item.participant2Designation || '',
-          meal: item.Meal || item.meal || '',
+          meal: item.Meal2 || item.meal2 || '',
           member: item.Member || item.member || 'No',
           memberId: item['Member ID'] || item.memberId || '',
           claim: item.Claim || item.claim || '',
           voucher: item.Voucher || item.voucher || '',
           status: item.Status || item.status || 'pending',
-          assignedTo: item.AssignedTo || item.assignedTo || 'unassigned'
+          trainer: item.Trainer || item.trainer || '',
+          assignedTo: item.['Assigned To'] || item.assignedTo || 'unassigned'
         }));
 
         setSubmissions(transformedData);
@@ -260,15 +262,15 @@ const AdminDashboard = () => {
       'Timestamp', 'Programme', 'Organisation', 'Address', 'PIC', 'Phone', 'Email',
       'Participant Count', 'P1 Name', 'P1 Phone', 'P1 Email', 'P1 Designation',
       'P2 Name', 'P2 Phone', 'P2 Email', 'P2 Designation',
-      'Meal', 'Member', 'Member ID', 'Claim', 'Voucher', 'Status', 'Assigned To'
+      'Meal', 'Meal2', 'Member','Trainer', 'Member ID', 'Claim', 'Voucher', 'Status', 'Assigned To'
     ];
 
     const rows = filteredData.map(sub => [
       sub.timestamp, sub.programme, sub.organisation, sub.address, sub.pic, sub.phone, sub.email,
       sub.participantCount, sub.participant1Name, sub.participant1Phone, sub.participant1Email, sub.participant1Designation,
       sub.participant2Name || '', sub.participant2Phone || '', sub.participant2Email || '', sub.participant2Designation || '',
-      sub.meal, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.status,
-      TEAM_MEMBERS.find(member => member.id === sub.assignedTo)?.name || 'Unassigned'
+      sub.meal, sub.meal2, sub.member, sub.memberId || '', sub.claim, sub.voucher || '', sub.status, 
+      TEAM_MEMBERS.find(member => member.id === sub.assignedTo)?.name || 'Unassigned', sub.trainer || ''
     ]);
 
     const csvContent = [
@@ -686,6 +688,10 @@ const AdminDashboard = () => {
                         <p className="text-sm text-gray-600">Email</p>
                         <p className="font-medium">{selectedSubmission.participant1Email}</p>
                       </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Meal Preference</p>
+                        <p className="font-medium">{selectedSubmission.meal}</p>
+                      </div> 
                     </div>
                   </div>
 
@@ -710,16 +716,16 @@ const AdminDashboard = () => {
                           <p className="text-sm text-gray-600">Email</p>
                           <p className="font-medium">{selectedSubmission.participant2Email}</p>
                         </div>
+                        <div>
+                        <p className="text-sm text-gray-600">Meal Preference</p>
+                        <p className="font-medium">{selectedSubmission.meal2}</p>
+                      </div> 
                       </div>
                     </div>
                   )}
 
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm text-gray-600">Meal Preference</p>
-                        <p className="font-medium">{selectedSubmission.meal}</p>
-                      </div>
+                    <div className="grid grid-cols-2 gap-4">                                        
                       <div>
                         <p className="text-sm text-gray-600">MIM Member</p>
                         <p className="font-medium">{selectedSubmission.member}</p>
@@ -760,8 +766,7 @@ const AdminDashboard = () => {
                             : selectedSubmission.status === 'registered'
                             ? 'bg-green-100 text-green-800'
                             : selectedSubmission.status === 'attended'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-red-100 text-red-800'
+                            ? 'bg-blue-100 text-blue-800'                            
                       }`}>
                         {selectedSubmission.status}
                       </span>
