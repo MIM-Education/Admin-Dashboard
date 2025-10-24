@@ -548,6 +548,28 @@ const AdminDashboard = () => {
                           Non-Member
                         </span>
                       )}
+                      <td className="px-3 py-3 whitespace-nowrap">
+                      <select
+                        value={submission.status}
+                        onChange={(e) => updateStatus(submission.id, e.target.value)}
+                        className={`text-xs rounded-full px-2 py-1 font-medium w-full ${
+                          submission.status === 'pending'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : submission.status === 'cancelled'
+                            ? 'bg-red-100 text-red-800'
+                            : submission.status === 'registered'
+                            ? 'bg-green-100 text-green-800'
+                            : submission.status === 'attended'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="registered">Registered</option>
+                        <option value="attended">Attended</option>
+                      </select>
+                    </td>
                     </td>
                     <td className="px-3 py-3 text-xs text-gray-900 whitespace-nowrap">
                       <span className="max-w-[100px] truncate block" title={submission.claim}>
