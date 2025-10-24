@@ -65,12 +65,12 @@ const AdminDashboard = () => {
           participant1Name: item['Participant Name'] || item.participant1Name || '',
           participant1Phone: item['Participant Phone'] || item.participant1Phone || '',
           participant1Email: item['Participant Email'] || item.participant1Email || '',
-          participant1Designation: item['Participant Designation'] || item.participant1Designation || '',
-          meal: item.Meal || item.meal || '',
+          participant1Designation: item['Participant Designation'] || item.participant1Designation || '',          
           participant2Name: item['Participant Name2'] || item.participant2Name || '',
           participant2Phone: item['Participant Phone2'] || item.participant2Phone || '',
           participant2Email: item['Participant Email2'] || item.participant2Email || '',
           participant2Designation: item['Participant Designation2'] || item.participant2Designation || '',
+          meal: item.Meal || item.meal || '',
           meal: item.Meal2 || item.meal2 || '',
           member: item.Member || item.member || 'No',
           memberId: item['Member ID'] || item.memberId || '',
@@ -687,11 +687,7 @@ const AdminDashboard = () => {
                       <div>
                         <p className="text-sm text-gray-600">Email</p>
                         <p className="font-medium">{selectedSubmission.participant1Email}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Meal Preference</p>
-                        <p className="font-medium">{selectedSubmission.meal}</p>
-                      </div> 
+                      </div>                      
                     </div>
                   </div>
 
@@ -715,17 +711,21 @@ const AdminDashboard = () => {
                         <div>
                           <p className="text-sm text-gray-600">Email</p>
                           <p className="font-medium">{selectedSubmission.participant2Email}</p>
-                        </div>
-                        <div>
-                        <p className="text-sm text-gray-600">Meal Preference</p>
-                        <p className="font-medium">{selectedSubmission.meal2}</p>
-                      </div> 
+                        </div>                         
                       </div>
                     </div>
                   )}
 
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <div className="grid grid-cols-2 gap-4">                                        
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-600">Meal Participant 1 Preference</p>
+                        <p className="font-medium">{selectedSubmission.meal}</p>
+                      </div> 
+                      <div>
+                        <p className="text-sm text-gray-600">Meal Participant 2 Preference</p>
+                        <p className="font-medium">{selectedSubmission.meal2}</p>
+                      </div>
                       <div>
                         <p className="text-sm text-gray-600">MIM Member</p>
                         <p className="font-medium">{selectedSubmission.member}</p>
