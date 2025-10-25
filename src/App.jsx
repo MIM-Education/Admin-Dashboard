@@ -1,39 +1,35 @@
-import { useState } from 'react';
-import { useAuth } from './context/AuthContext';
-import LoginPage from './pages/LoginPage';
-import AdminDashboard from './pages/AdminDashboard';
-import SalesDashboard from './pages/SalesDashboard';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import AdminDashboard from "./pages/AdminDashboard";
+import SalesDashboard from "./pages/SalesDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 
-const App = () => {
-  const { user } = useAuth();
-  const [currentPage, setCurrentPage] = useState('login');
-
-  const handleLoginSuccess = () => {
-    if (user?.role === 'admin') {
-      setCurrentPage('admin');
-    } else if (user?.role === 'sales') {
-      setCurrentPage('sales');
-    }
-  };
-
-  if (!user && currentPage !== 'login') {
-    return <LoginPage onLoginSuccess={handleLoginSuccess} />;
-  }
-
-  if (currentPage === 'login') {
-    return <LoginPage onLoginSuccess={handleLoginSuccess} />;
-  }
-
-  if (currentPage === 'admin' && user?.role === 'admin') {
-    return <AdminDashboard />;
-  }
-
-  if (currentPage === 'sales' && user?.role === 'sales') {
-    return <SalesDashboard />;
-  }
-
-  // Fallback: redirect to login if user role doesn't match or page is invalid
-  return <LoginPage onLoginSuccess={handleLoginSuccess} />;
-};
+const App = () => (
+  <AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sales"
+          element={
+            <ProtectedRoute allowedRoles={["sales", "admin"]}>
+              <SalesDashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  </AuthProvider>
+);
 
 export default App;
